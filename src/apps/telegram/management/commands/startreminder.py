@@ -1,4 +1,4 @@
-"""Start reminder command for the users app."""
+"""Start reminder command for all telegram settings."""
 
 from django_telegram_app.management.base import BaseTelegramCommand
 
@@ -6,6 +6,6 @@ from apps.telegram.telegrambot.commands.reminder import Command as ReminderComma
 
 
 class Command(BaseTelegramCommand):
-    """Start the reminder command for all active users."""
+    """Start the reminder command for all telegram settings."""
 
     command = ReminderCommand

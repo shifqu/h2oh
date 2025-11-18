@@ -7,12 +7,12 @@ from apps.telegram.models import TelegramSettings
 
 
 class Command(BaseCommand):
-    """Reset reminder state for all users."""
+    """Reset reminder state for all telegram settings."""
 
-    help = "Reset reminder state for all users."
+    help = "Reset reminder state for all telegram settings."
 
     def handle(self, *_args, **_options):
-        """Reset reminder state for all users."""
+        """Reset reminder state for all telegram settings."""
         if not TelegramSettings.objects.exists():
             self.stdout.write(self.style.NOTICE("No TelegramSettings found. Nothing to do."))
             return
