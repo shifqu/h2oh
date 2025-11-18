@@ -1,0 +1,15 @@
+services:
+  h2oh:
+    build:
+      target: development
+    environment:
+      - DJANGO_ENVIRONMENT=development
+      - DJANGO_DEBUG=${DJANGO_DEBUG:-1}
+    volumes:
+      - ./:/app
+      - /app/.venv
+      - ./db.sqlite3:/db_data/db.sqlite3
+      - ./media/:/media_data/
+      - ./logs/:/log_data/
+    ports:
+      - "8000:38080"

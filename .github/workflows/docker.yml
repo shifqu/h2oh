@@ -1,0 +1,21 @@
+name: "Docker Build Validation"
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: |
+          docker build -t h2oh:ci .
+      - name: Test Docker image starts Python and has django installed
+        run: |
+          docker run --rm --entrypoint python h2oh:ci -c "import django; print('Docker build successful')"
+      - name: Test Docker image's user home directory does NOT exist
+        run: |
+          docker run --rm --entrypoint sh h2oh:ci -c '[ ! -d "$HOME" ]'

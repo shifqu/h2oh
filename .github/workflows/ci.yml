@@ -1,0 +1,39 @@
+name: "CI Validation"
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip pip-tools
+          pip-sync requirements/dev.txt
+          pip install --editable .[dev]
+
+      - name: Lint
+        run: |
+          ruff check --fix src/
+          pylint src/
+          ruff format --check src/
+          pyright src/
+
+      - name: Test
+        env:
+          DJANGO_SECRET_KEY: dummy-eadec2dca4758f123c9144011e386c00806bbdf1d3ba93dd18a098fa11a005f89ec988a3a6
+          TELEGRAM_BOT_URL: https://api.dummybots.org/dummybot
+          TELEGRAM_WEBHOOK_TOKEN: dummytoken
+        run: |
+          manage test src/apps

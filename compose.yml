@@ -1,0 +1,27 @@
+services:
+  h2oh:
+    build:
+      context: .
+      target: production
+    restart: unless-stopped
+    volumes:
+      - h2oh_db_data:/db_data
+      - h2oh_static_data:/static_data
+      - h2oh_media_data:/media_data
+      - h2oh_log_data:/log_data
+    env_file:
+      - .dockerenv
+    environment:
+      - DJANGO_ENVIRONMENT=production
+      - DJANGO_STATIC_ROOT=/static_data
+      - DJANGO_MEDIA_ROOT=/media_data
+      - DJANGO_DATABASE_NAME=/db_data/db.sqlite3
+      - DJANGO_LOG_FILENAME=/log_data/h2oh.log
+      - DJANGO_DEBUG=0
+      - DJANGO_PROJECT_STATIC_DIR=/app/static
+
+volumes:
+  h2oh_db_data:
+  h2oh_static_data:
+  h2oh_media_data:
+  h2oh_log_data:

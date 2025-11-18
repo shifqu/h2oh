@@ -1,0 +1,4 @@
+django>=5,<6
+gunicorn
+django-telegram-app
+envyronment
