@@ -4,7 +4,7 @@
 #
 #    pip-compile --extra=dev --output-file=requirements/dev.txt pyproject.toml
 #
-asgiref==3.10.0
+asgiref==3.11.0
     # via django
 astroid==4.0.2
     # via pylint
@@ -12,7 +12,7 @@ certifi==2025.11.12
     # via requests
 charset-normalizer==3.4.4
     # via requests
-coverage==7.11.3
+coverage==7.12.0
     # via h2oh (pyproject.toml)
 dill==0.4.0
     # via pylint
@@ -20,7 +20,7 @@ django==5.2.8
     # via
     #   django-telegram-app
     #   h2oh (pyproject.toml)
-django-telegram-app==0.3.0
+django-telegram-app==1.0.0
     # via h2oh (pyproject.toml)
 django-types==0.22.0
     # via h2oh (pyproject.toml)
@@ -48,7 +48,7 @@ python-dotenv==1.2.1
     # via h2oh (pyproject.toml)
 requests==2.32.5
     # via django-telegram-app
-ruff==0.14.5
+ruff==0.14.6
     # via h2oh (pyproject.toml)
 sqlparse==0.5.3
     # via django

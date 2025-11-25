@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=requirements/main.txt pyproject.toml
 #
-asgiref==3.10.0
+asgiref==3.11.0
     # via django
 certifi==2025.11.12
     # via requests
@@ -14,7 +14,7 @@ django==5.2.8
     # via
     #   django-telegram-app
     #   h2oh (pyproject.toml)
-django-telegram-app==0.3.0
+django-telegram-app==1.0.0
     # via h2oh (pyproject.toml)
 envyronment==0.4.0
     # via h2oh (pyproject.toml)
