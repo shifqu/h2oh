@@ -21,5 +21,6 @@ class Command(BaseCommand):
             for telegram_settings in TelegramSettings.objects.all():
                 telegram_settings.consumed_today_ml = 0
                 telegram_settings.next_reminder_at = telegram_settings.reminder_window_start
+                telegram_settings.last_reminder_sent_at = None
                 telegram_settings.save()
         self.stdout.write(self.style.SUCCESS("Successfully reset reminder state for all users."))

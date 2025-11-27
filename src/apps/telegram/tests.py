@@ -22,7 +22,7 @@ class StartCommandTests(TelegramBotTestCase):
         self.send_text("21:00")  # reminder_window_end
         self.assertTrue(self.last_bot_message.startswith("Please provide your consumption size (ml)."))
         self.send_text("300")  # consumption_size
-        self.send_text("600")  # default_postpone
+        self.send_text("600")  # reminder_repeat_interval_seconds
         self.send_text("60")  # minimum_interval
         self.click_on_text("Use default (Time to hydrate!)")  # reminder_text
         self.click_on_text("✅ Yes")  # confirmation
@@ -34,7 +34,7 @@ class StartCommandTests(TelegramBotTestCase):
         self.assertEqual(settings.reminder_window_start.strftime("%H:%M"), "09:00")
         self.assertEqual(settings.reminder_window_end.strftime("%H:%M"), "21:00")
         self.assertEqual(settings.consumption_size_ml, 300)
-        self.assertEqual(settings.default_postpone_seconds, 600)
+        self.assertEqual(settings.reminder_repeat_interval_seconds, 600)
         self.assertEqual(settings.minimum_interval_seconds, 60)
         self.assertEqual(settings.reminder_text, "Time to hydrate!")
         self.assertTrue(settings.is_initialized)
@@ -51,7 +51,7 @@ class ReminderCommandTests(TelegramBotTestCase):
             chat_id=123456789,
             daily_goal_ml=2000,
             consumption_size_ml=250,
-            default_postpone_seconds=900,
+            reminder_repeat_interval_seconds=900,
             reminder_text="Time to hydrate!",
             reminder_window_start="08:00:00",
             reminder_window_end="22:00:00",
@@ -93,48 +93,10 @@ class ReminderCommandTests(TelegramBotTestCase):
         self._remind_and_done(fake_datetime, expected_time=expected_time)
         self.assertEqual(self.telegramsettings.consumed_today_ml, self.telegramsettings.daily_goal_ml)
 
-    def test_reminder_command_postpone(self):
-        """Test the reminder command with postponing.
-
-        Goal: 2000 ml
-        Glass size: 250 ml → 8 glasses total
-        First reminder at 08:00 is "Postponed" 4 times, then "Done".
-        At 09:00 you've consumed your first 250 ml.
-        So at 09:00, the remaining looks like this, for example:
-
-        If consumed_ml is 250 at 09:00:
-        remaining_ml = 1750
-        remaining_reminders = ceil(1750 / 250) = 7
-        remaining window: 09:00 → 22:00 = 13h = 46800s
-        ideal_interval = 46800 / 7 ≈ 6685.7s = 1h 51m 25.7s
-        """
-        # First reminder to set next_reminder_at
-        fake_datetime = timezone.now().replace(hour=7, minute=0, second=0, microsecond=0)
-        self._remind_only(fake_datetime)
-        self.assertEqual(self.telegramsettings.next_reminder_at, time(8, 0))
-        fake_datetime = timezone.now().replace(hour=8, minute=0, second=0, microsecond=0)
-        # Postpone multiple times
-        for _ in range(4):
-            self._remind_and_postpone(fake_datetime)
-            fake_datetime += timezone.timedelta(minutes=15)
-
-        # Now respond "Done" and expted time to be computed accordingly
-        self._remind_and_done(fake_datetime, expected_time=time(10, 51, 25, 714286))
-
     def _remind_only(self, fake_datetime: datetime):
         with patch("apps.telegram.telegrambot.commands.reminder.timezone.now", return_value=fake_datetime):
             self.send_text("/reminder")
         self.telegramsettings.refresh_from_db()
-
-    def _remind_and_postpone(self, fake_datetime: datetime, expected_time: time | None = None):
-        with patch("apps.telegram.telegrambot.commands.reminder.timezone.now", return_value=fake_datetime):
-            self.send_text("/reminder")
-            self.click_on_text("⏰ Postpone")
-            self.telegramsettings.refresh_from_db()
-        if not expected_time:
-            expected_time = (fake_datetime + timezone.timedelta(minutes=15)).time()
-        self.assertEqual(self.telegramsettings.next_reminder_at, expected_time)
-        return expected_time
 
     def _remind_and_done(self, fake_datetime: datetime, expected_time: time | None = None):
         with patch("apps.telegram.telegrambot.commands.reminder.timezone.now", return_value=fake_datetime):
@@ -157,7 +119,7 @@ class HydrateCommandTests(TelegramBotTestCase):
             chat_id=123456789,
             daily_goal_ml=2000,
             consumption_size_ml=250,
-            default_postpone_seconds=900,
+            reminder_repeat_interval_seconds=900,
             reminder_text="Time to hydrate!",
             reminder_window_start="08:00:00",
             reminder_window_end="22:00:00",
