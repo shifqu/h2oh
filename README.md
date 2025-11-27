@@ -32,7 +32,7 @@ Built with Django and a Telegram bot integration, it helps you track and maintai
 
 ---
 
-🤖 Powered by Django + Telegram
+🤖 Powered by Django + Telegram + Django-Telegram-App
 
 Uses Django for persistence and preference management.
 
