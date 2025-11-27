@@ -48,6 +48,10 @@ class Remind(TelegramStep):
             if earliest_reminder > now:
                 return
 
+        if not self.command.settings.in_reminder_window(current_time):
+            # Outside reminder window
+            return
+
         data = self.get_callback_data(telegram_update)
         keyboard = [[{"text": "💧 Done", "callback_data": self.next_step_callback(data, done=True)}]]
         bot.send_message(
