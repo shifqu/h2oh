@@ -24,17 +24,13 @@ Built with Django and a Telegram bot integration, it helps you track and maintai
 
 - ✅ Flexible reminder flow  
     When the bot reminds you to drink, you can reply with:
-    - "Done! 💧" – mark your progress for the day.
-    - "Remind me later! ⏰" – delay the next reminder by a configurable amount of time.
-
-- ✅ **Skip days easily**
-    Exclude certain days (like weekends) from your schedule — no unnecessary guilt trips on your rest days.
+    - "Done!" – mark your progress for the day.
+    - "Remind me later!" – delay the next reminder by a configurable amount of time.
 
 - ✅ **Simple progress tracking**
     Log drinks directly from Telegram with `/hydrate`, or tap "Done! 💧" when prompted — your daily stats are stored automatically.
 
-- ✅ **Admin-friendly configuration**
-    All telegram settings (goals, times, excluded days, postponement delay) are configurable from an admin interface.
+---
 
 🤖 Powered by Django + Telegram
 
