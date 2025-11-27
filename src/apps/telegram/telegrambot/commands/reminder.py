@@ -34,22 +34,30 @@ class Remind(TelegramStep):
             self.command.settings.save()
             return
 
-        current_time = timezone.now().time()
+        now = timezone.now()
+        current_time = now.time()
         if self.command.settings.next_reminder_at > current_time:
             # Not time for the next reminder yet
             return
 
+        if self.command.settings.last_reminder_sent_at:
+            # Reminder already sent for the current period
+            earliest_reminder = self.command.settings.last_reminder_sent_at + timezone.timedelta(
+                seconds=self.command.settings.reminder_repeat_interval_seconds
+            )
+            if earliest_reminder > now:
+                return
+
         data = self.get_callback_data(telegram_update)
-        keyboard = [
-            [{"text": "💧 Done", "callback_data": self.next_step_callback(data, done=True)}],
-            [{"text": "⏰ Postpone", "callback_data": self.next_step_callback(data, done=False)}],
-        ]
+        keyboard = [[{"text": "💧 Done", "callback_data": self.next_step_callback(data, done=True)}]]
         bot.send_message(
             self.command.settings.reminder_text,
             self.command.settings.chat_id,
             reply_markup={"inline_keyboard": keyboard},
             message_id=telegram_update.message_id,
         )
+        self.command.settings.last_reminder_sent_at = now
+        self.command.settings.save()
 
 
 class ScheduleNext(TelegramStep):
@@ -57,19 +65,12 @@ class ScheduleNext(TelegramStep):
 
     def handle(self, telegram_update: TelegramUpdate):
         """Handle scheduling the next reminder."""
-        data = self.get_callback_data(telegram_update)
-        done = data.get("done")
         now = timezone.now()
         from_time = now.time()
-        if done:
-            self.command.settings.consumed_today_ml += self.command.settings.consumption_size_ml
-
+        self.command.settings.consumed_today_ml += self.command.settings.consumption_size_ml
         next_reminder_at = self.command.settings.compute_next_reminder_datetime(from_time)
-        if not done:
-            postponed_time = (now + timezone.timedelta(seconds=self.command.settings.default_postpone_seconds)).time()
-            if self.command.settings.in_reminder_window(postponed_time):
-                next_reminder_at = postponed_time
 
+        self.command.settings.last_reminder_sent_at = None
         self.command.settings.next_reminder_at = next_reminder_at
         self.command.settings.save()
         bot.send_message(

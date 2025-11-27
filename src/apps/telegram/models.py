@@ -44,11 +44,11 @@ class TelegramSettings(AbstractTelegramSettings):
         ),
         validators=[MinValueValidator(100), MaxValueValidator(500)],
     )
-    default_postpone_seconds = models.IntegerField(
-        verbose_name=_("default postpone (seconds)"),
+    reminder_repeat_interval_seconds = models.IntegerField(
+        verbose_name=_("reminder repeat interval (seconds)"),
         default=900,
         help_text=_(
-            'How long a reminder should be postponed when you choose "Remind me later" (in seconds). '
+            "How long the bot should wait before repeating a reminder if you haven't logged your drink (in seconds). "
             "Default is 15 minutes (900 seconds). "
         ),
     )
@@ -77,6 +77,12 @@ class TelegramSettings(AbstractTelegramSettings):
         verbose_name=_("is initialized"),
         default=False,
         help_text=_("whether the initial setup has been completed"),
+    )
+    last_reminder_sent_at = models.DateTimeField(
+        verbose_name=_("last reminder sent at"),
+        null=True,
+        blank=True,
+        help_text=_("timestamp of the last reminder sent"),
     )
 
     @property
