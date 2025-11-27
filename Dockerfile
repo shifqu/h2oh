@@ -55,8 +55,8 @@ COPY --chown=appuser:appuser static/ static/
 COPY --chown=appuser:appuser src/ src/
 COPY --chown=appuser:appuser pyproject.toml pyproject.toml
 
-# Compile translations
-RUN cd src/apps && django-admin compilemessages
+# Compile translations -- We do not currently supply translation files
+# RUN cd src/apps && django-admin compilemessages
 
 # Install the application
 RUN pip install .
