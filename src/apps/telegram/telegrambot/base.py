@@ -2,12 +2,12 @@
 
 from abc import ABC
 
-from django_telegram_app.bot.base import BaseCommand, Step
+from django_telegram_app.bot.base import BaseBotCommand, Step
 
 from apps.telegram.models import TelegramSettings
 
 
-class TelegramCommand(BaseCommand, ABC):
+class TelegramCommand(BaseBotCommand, ABC):
     """Base class for telegram commands."""
 
     settings: TelegramSettings
