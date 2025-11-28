@@ -40,13 +40,12 @@ class Remind(TelegramStep):
             # Not time for the next reminder yet
             return
 
-        if self.command.settings.last_reminder_sent_at:
-            # Reminder already sent for the current period
-            earliest_reminder = self.command.settings.last_reminder_sent_at + timezone.timedelta(
-                seconds=self.command.settings.reminder_repeat_interval_seconds
-            )
-            if earliest_reminder > now:
-                return
+        if (
+            self.command.settings.last_reminder_sent_at
+            and self.command.settings.last_reminder_sent_at >= self.command.settings.next_reminder_at
+        ):
+            # Reminder already sent at this time
+            return
 
         if not self.command.settings.in_reminder_window(current_time):
             # Outside reminder window
@@ -60,7 +59,7 @@ class Remind(TelegramStep):
             reply_markup={"inline_keyboard": keyboard},
             message_id=telegram_update.message_id,
         )
-        self.command.settings.last_reminder_sent_at = now
+        self.command.settings.last_reminder_sent_at = current_time
         self.command.settings.save()
 
 
@@ -73,8 +72,6 @@ class ScheduleNext(TelegramStep):
         from_time = now.time()
         self.command.settings.consumed_today_ml += self.command.settings.consumption_size_ml
         next_reminder_at = self.command.settings.compute_next_reminder_datetime(from_time)
-
-        self.command.settings.last_reminder_sent_at = None
         self.command.settings.next_reminder_at = next_reminder_at
         self.command.settings.save()
         bot.send_message(

@@ -28,12 +28,6 @@ class Command(TelegramCommand):
             ValidateFieldInput(self, "reminder_window_end", unique_id="validate_reminder_window_end"),
             AskTelegramSettingsField(self, "consumption_size_ml", unique_id="ask_consumption_size_ml"),
             ValidateFieldInput(self, "consumption_size_ml", unique_id="validate_consumption_size_ml"),
-            AskTelegramSettingsField(
-                self, "reminder_repeat_interval_seconds", unique_id="ask_reminder_repeat_interval_seconds"
-            ),
-            ValidateFieldInput(
-                self, "reminder_repeat_interval_seconds", unique_id="validate_reminder_repeat_interval_seconds"
-            ),
             AskTelegramSettingsField(self, "minimum_interval_seconds", unique_id="ask_minimum_interval_seconds"),
             ValidateFieldInput(self, "minimum_interval_seconds", unique_id="validate_minimum_interval_seconds"),
             AskTelegramSettingsField(self, "reminder_text", unique_id="ask_reminder_text"),
@@ -131,7 +125,6 @@ class AskConfirmation(TelegramStep):
         reminder_window_start = data.get("reminder_window_start")
         reminder_window_end = data.get("reminder_window_end")
         consumption_size_ml = data.get("consumption_size_ml")
-        reminder_repeat_interval_seconds = data.get("reminder_repeat_interval_seconds")
         minimum_interval_seconds = data.get("minimum_interval_seconds")
         reminder_text = data.get("reminder_text")
         prompt = (
@@ -140,7 +133,6 @@ class AskConfirmation(TelegramStep):
             f" - Reminder window start: {reminder_window_start}\n"
             f" - Reminder window end: {reminder_window_end}\n"
             f" - Consumption size (ml): {consumption_size_ml}\n"
-            f" - Reminder repeat interval (seconds): {reminder_repeat_interval_seconds}\n"
             f" - Minimum interval (seconds): {minimum_interval_seconds}\n"
             f" - Reminder text: {reminder_text}"
         )
@@ -163,7 +155,6 @@ class ConfirmStart(TelegramStep):
             "reminder_window_start",
             "reminder_window_end",
             "consumption_size_ml",
-            "reminder_repeat_interval_seconds",
             "minimum_interval_seconds",
             "reminder_text",
         ]
