@@ -22,7 +22,6 @@ class StartCommandTests(TelegramBotTestCase):
         self.send_text("21:00")  # reminder_window_end
         self.assertTrue(self.last_bot_message.startswith("Please provide your consumption size (ml)."))
         self.send_text("300")  # consumption_size
-        self.send_text("600")  # reminder_repeat_interval_seconds
         self.send_text("60")  # minimum_interval
         self.click_on_text("Use default (Time to hydrate!)")  # reminder_text
         self.click_on_text("✅ Yes")  # confirmation
@@ -34,7 +33,6 @@ class StartCommandTests(TelegramBotTestCase):
         self.assertEqual(settings.reminder_window_start.strftime("%H:%M"), "09:00")
         self.assertEqual(settings.reminder_window_end.strftime("%H:%M"), "21:00")
         self.assertEqual(settings.consumption_size_ml, 300)
-        self.assertEqual(settings.reminder_repeat_interval_seconds, 600)
         self.assertEqual(settings.minimum_interval_seconds, 60)
         self.assertEqual(settings.reminder_text, "Time to hydrate!")
         self.assertTrue(settings.is_initialized)
@@ -51,7 +49,6 @@ class ReminderCommandTests(TelegramBotTestCase):
             chat_id=123456789,
             daily_goal_ml=2000,
             consumption_size_ml=250,
-            reminder_repeat_interval_seconds=900,
             reminder_text="Time to hydrate!",
             reminder_window_start="08:00:00",
             reminder_window_end="22:00:00",
@@ -119,7 +116,6 @@ class HydrateCommandTests(TelegramBotTestCase):
             chat_id=123456789,
             daily_goal_ml=2000,
             consumption_size_ml=250,
-            reminder_repeat_interval_seconds=900,
             reminder_text="Time to hydrate!",
             reminder_window_start="08:00:00",
             reminder_window_end="22:00:00",
