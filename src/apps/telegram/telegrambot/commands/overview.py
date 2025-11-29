@@ -23,11 +23,7 @@ class ShowOverview(TelegramStep):
     def handle(self, telegram_update: TelegramUpdate):
         """Handle showing the overview."""
         if not self.command.settings.is_initialized:
-            bot.send_message(
-                "Please complete the setup first by using the /start command.",
-                self.command.settings.chat_id,
-                message_id=telegram_update.message_id,
-            )
+            self.send_not_initialized_message(telegram_update)
             return
 
         consumed = self.command.settings.consumed_today_ml
