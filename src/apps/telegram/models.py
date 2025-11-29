@@ -76,6 +76,12 @@ class TelegramSettings(AbstractTelegramSettings):
         blank=True,
         help_text=_("time of the last reminder sent"),
     )
+    next_overview_at = models.TimeField(
+        verbose_name=_("next overview at"),
+        null=True,
+        blank=True,
+        help_text=_("when the next daily overview is scheduled"),
+    )
 
     @property
     def hydration_schedule(self) -> HydrationSchedule:
