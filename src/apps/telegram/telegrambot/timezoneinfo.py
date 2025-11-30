@@ -1,3 +1,5 @@
+"""Timezone information for Telegram bot."""
+
 import zoneinfo
 
 ALL_TIMEZONES = zoneinfo.available_timezones()
