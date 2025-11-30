@@ -1,7 +1,5 @@
 """Start command for Telegram bot."""
 
-import zoneinfo
-
 from django.core.exceptions import ValidationError
 from django_telegram_app.bot import bot
 from django_telegram_app.bot.base import TelegramUpdate
@@ -255,7 +253,7 @@ class ConfirmStart(TelegramStep):
             setattr(cmd_settings, key, key_data)
         cmd_settings.is_initialized = True
         cmd_settings.full_clean()
-        cmd_settings.timezone = zoneinfo.ZoneInfo(cmd_settings.timezone).key
+        cmd_settings.timezone = timezoneinfo.normalize_timezone(cmd_settings.timezone)
         cmd_settings.reminder_window_start = cmd_settings.convert_time_to_utc(cmd_settings.reminder_window_start)
         cmd_settings.reminder_window_end = cmd_settings.convert_time_to_utc(cmd_settings.reminder_window_end)
         cmd_settings.next_reminder_at = cmd_settings.compute_next_reminder_datetime()
