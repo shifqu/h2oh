@@ -39,6 +39,8 @@ class ShowOverview(TelegramStep):
         else:
             msg += "\n\n🚰 Keep drinking water to reach your goal!"
 
+        msg += f"\n\nNext reminder scheduled at {self.command.settings.get_next_reminder_at_display()} local time."
+
         bot.send_message(
             msg,
             self.command.settings.chat_id,
