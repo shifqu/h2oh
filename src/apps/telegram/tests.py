@@ -23,8 +23,8 @@ class StartCommandTests(TelegramBotTestCase):
         self.assertTrue(self.last_bot_message.startswith("Please provide your consumption size (ml)."))
         self.send_text("300")  # consumption_size
         self.send_text("60")  # minimum_interval
-        self.click_on_text("Use default (Time to hydrate!)")  # reminder_text
-        self.click_on_text("✅ Yes")  # confirmation
+        self.click_on_button("Use default (Time to hydrate!)")  # reminder_text
+        self.click_on_button("✅ Yes")  # confirmation
 
         # Verify that the settings were created/updated correctly
         chat_id = self.fake_bot_post.call_args[1]["payload"]["chat_id"]
@@ -98,7 +98,7 @@ class ReminderCommandTests(TelegramBotTestCase):
     def _remind_and_done(self, fake_datetime: datetime, expected_time: time | None = None):
         with patch("apps.telegram.telegrambot.commands.reminder.timezone.now", return_value=fake_datetime):
             self.send_text("/reminder")
-            self.click_on_text("💧 Done")
+            self.click_on_button("💧 Done")
             self.telegramsettings.refresh_from_db()
         if not expected_time:
             expected_time = (fake_datetime + timezone.timedelta(hours=2)).time()
