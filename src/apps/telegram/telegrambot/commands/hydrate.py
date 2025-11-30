@@ -23,11 +23,7 @@ class AskConsumptionSize(TelegramStep):
     def handle(self, telegram_update: TelegramUpdate):
         """Handle asking for water consumption size."""
         if not self.command.settings.is_initialized:
-            bot.send_message(
-                "Please complete the setup first by using the /start command.",
-                self.command.settings.chat_id,
-                message_id=telegram_update.message_id,
-            )
+            self.send_not_initialized_message(telegram_update)
             return
 
         data = self.get_callback_data(telegram_update)

@@ -24,8 +24,7 @@ class Remind(TelegramStep):
     def handle(self, telegram_update: TelegramUpdate):
         """Handle the reminder step."""
         if not self.command.settings.is_initialized:
-            # Settings not initialized; do not send reminder
-            # Don't send a message either, since we don't want to spam uninitialized users.
+            self.send_not_initialized_message(telegram_update)
             return
 
         if not self.command.settings.next_reminder_at:
