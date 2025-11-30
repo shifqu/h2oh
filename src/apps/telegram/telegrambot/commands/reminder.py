@@ -70,11 +70,10 @@ class ScheduleNext(TelegramStep):
         now = timezone.now()
         from_time = now.time()
         self.command.settings.consumed_today_ml += self.command.settings.consumption_size_ml
-        next_reminder_at = self.command.settings.compute_next_reminder_datetime(from_time)
-        self.command.settings.next_reminder_at = next_reminder_at
+        self.command.settings.next_reminder_at = self.command.settings.compute_next_reminder_datetime(from_time)
         self.command.settings.save()
         bot.send_message(
-            f"Next reminder scheduled at {next_reminder_at.isoformat(timespec='seconds')} UTC.",
+            f"Next reminder scheduled at {self.command.settings.get_next_reminder_at_display()} local time.",
             self.command.settings.chat_id,
             message_id=telegram_update.message_id,
         )

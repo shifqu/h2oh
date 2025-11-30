@@ -64,7 +64,10 @@ class LogConsumption(TelegramStep):
         self.command.settings.save()
         data = self.get_callback_data(telegram_update)
         bot.send_message(
-            f"Logged {consumption_size_ml}ml of water! 💧",
+            f"Logged {consumption_size_ml}ml of water! 💧\n\n"
+            "Total consumed today: "
+            f"{self.command.settings.consumed_today_ml}ml/{self.command.settings.daily_goal_ml}ml.\n\n"
+            f"Next reminder scheduled at {self.command.settings.get_next_reminder_at_display()} local time.",
             self.command.settings.chat_id,
             message_id=telegram_update.message_id,
         )
