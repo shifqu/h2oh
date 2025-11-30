@@ -1,5 +1,6 @@
 """Models for the Telegram app."""
 
+import zoneinfo
 from datetime import time
 
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -82,6 +83,12 @@ class TelegramSettings(AbstractTelegramSettings):
         blank=True,
         help_text=_("when the next daily overview is scheduled"),
     )
+    timezone = models.CharField(
+        verbose_name=_("timezone"),
+        max_length=64,
+        default="Europe/Brussels",
+        help_text=_("the user's timezone, e.g., 'Europe/Brussels'"),
+    )
 
     @property
     def hydration_schedule(self) -> HydrationSchedule:
@@ -106,3 +113,30 @@ class TelegramSettings(AbstractTelegramSettings):
         if from_time is None:
             from_time = timezone.now().time()
         return self.hydration_schedule.compute_next_reminder(from_time)
+
+    def convert_time_to_utc(self, time_obj: time) -> time:
+        """Convert a time object from the user's timezone to an utc time."""
+        return self._convert_time(time_obj, from_=self.timezone, to="UTC")
+
+    def convert_time_from_utc(self, time_obj: time) -> time:
+        """Convert a time object from utc to the user's timezone."""
+        return self._convert_time(time_obj, from_="UTC", to=self.timezone)
+
+    def _convert_time(self, time_obj: time, from_: str, to: str) -> time:
+        if from_ == to:
+            return time_obj
+
+        from_tz = zoneinfo.ZoneInfo(from_)
+        to_tz = zoneinfo.ZoneInfo(to)
+        now_utc = timezone.now()
+        now_in_timezone = now_utc.astimezone(to_tz)
+        dt = timezone.datetime.combine(now_in_timezone.date(), time_obj, tzinfo=from_tz)
+        dt_in_tz = dt.astimezone(to_tz)
+        return dt_in_tz.time()
+
+    def get_next_reminder_at_display(self) -> str:
+        """Get the next reminder time converted to the user's timezone for display."""
+        if not self.next_reminder_at:
+            return "N/A"
+        local_time = self.convert_time_from_utc(self.next_reminder_at)
+        return local_time.isoformat(timespec="minutes")

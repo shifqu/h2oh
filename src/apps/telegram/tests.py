@@ -15,6 +15,11 @@ class StartCommandTests(TelegramBotTestCase):
     def test_start_command_flow(self):
         """Test the full flow of the start command."""
         self.send_text("/start")
+        self.send_text("invalid timezone")  # timezone
+        self.assertIn("Please try again", self.last_bot_message)
+        self.click_on_button("Europe")
+        self.click_on_button(-1)  # go back
+        self.send_text("utc")
         self.send_text("2500")  # daily_goal
         self.send_text("invalid time")  # reminder_window_start
         self.assertIn("Invalid input for first reminder", self.last_bot_message)
@@ -42,20 +47,6 @@ class StartCommandTests(TelegramBotTestCase):
 class ReminderCommandTests(TelegramBotTestCase):
     """Reminder command test case."""
 
-    @classmethod
-    def setUpTestData(cls):
-        """Set up test data."""
-        cls.telegramsettings = TelegramSettings.objects.create(
-            chat_id=123456789,
-            daily_goal_ml=2000,
-            consumption_size_ml=250,
-            reminder_text="Time to hydrate!",
-            reminder_window_start="08:00:00",
-            reminder_window_end="22:00:00",
-            minimum_interval_seconds=300,
-            is_initialized=True,
-        )
-
     def test_reminder_command(self):
         """Test the reminder command.
 
@@ -72,9 +63,8 @@ class ReminderCommandTests(TelegramBotTestCase):
         ideal_interval = 50400 / 7 ≈ 7200s = 2h
         """
         fake_datetime = timezone.now().replace(hour=7, minute=0, second=0, microsecond=0)
-        self.assertIsNone(self.telegramsettings.next_reminder_at)
-        self._remind_only(fake_datetime)
-        self.assertEqual(self.telegramsettings.next_reminder_at, time(8, 0))
+        self.fake_settings = self.create_fake_settings(fake_datetime)
+        self.assertEqual(self.fake_settings.next_reminder_at, time(8, 0))
         fake_datetime = timezone.now().replace(hour=8, minute=0, second=0, microsecond=0)
         for _ in range(7):
             next_reminder_time = self._remind_and_done(fake_datetime)
@@ -86,24 +76,42 @@ class ReminderCommandTests(TelegramBotTestCase):
 
         # Final reminder should be sent at 22, expected next reminder is after window
         self.assertEqual(fake_datetime.time(), time(22))
-        expected_time = self.telegramsettings.reminder_window_start
+        expected_time = self.fake_settings.reminder_window_start
         self._remind_and_done(fake_datetime, expected_time=expected_time)
-        self.assertEqual(self.telegramsettings.consumed_today_ml, self.telegramsettings.daily_goal_ml)
+        self.assertEqual(self.fake_settings.consumed_today_ml, self.fake_settings.daily_goal_ml)
 
     def _remind_only(self, fake_datetime: datetime):
         with patch("apps.telegram.telegrambot.commands.reminder.timezone.now", return_value=fake_datetime):
             self.send_text("/reminder")
-        self.telegramsettings.refresh_from_db()
+        self.fake_settings.refresh_from_db()
 
     def _remind_and_done(self, fake_datetime: datetime, expected_time: time | None = None):
         with patch("apps.telegram.telegrambot.commands.reminder.timezone.now", return_value=fake_datetime):
             self.send_text("/reminder")
             self.click_on_button("💧 Done")
-            self.telegramsettings.refresh_from_db()
+            self.fake_settings.refresh_from_db()
         if not expected_time:
             expected_time = (fake_datetime + timezone.timedelta(hours=2)).time()
-        self.assertEqual(self.telegramsettings.next_reminder_at, expected_time)
+        self.assertEqual(self.fake_settings.next_reminder_at, expected_time)
         return expected_time
+
+    def create_fake_settings(self, current_datetime: datetime) -> TelegramSettings:
+        """Create fake telegram settings for testing."""
+        with patch("apps.telegram.telegrambot.commands.reminder.timezone.now", return_value=current_datetime):
+            settings = TelegramSettings.objects.create(
+                chat_id=123456789,
+                timezone="UTC",
+                daily_goal_ml=2000,
+                consumption_size_ml=250,
+                reminder_window_start=time(8, 0),
+                reminder_window_end=time(22, 0),
+                minimum_interval_seconds=1800,
+                reminder_text="Time to hydrate!",
+                is_initialized=True,
+                consumed_today_ml=0,
+                next_reminder_at=time(8, 0),
+            )
+        return settings
 
 
 class HydrateCommandTests(TelegramBotTestCase):
