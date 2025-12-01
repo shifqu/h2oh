@@ -109,9 +109,7 @@ LANGUAGE_CODE = "en-us"
 # Full list of language codes supported by Django can be found here:
 # https://docs.djangoproject.com/en/5.1/ref/settings/#languages
 LANGUAGES = [
-    ("de", gettext_noop("German")),
     ("en", gettext_noop("English")),
-    ("fr", gettext_noop("French")),
     ("nl", gettext_noop("Dutch")),
 ]
 
