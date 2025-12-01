@@ -39,7 +39,7 @@ class ShowOverview(TelegramStep):
             msg += _("\n\n👍 You've **almost** met your daily hydration goal!")
         else:
             msg += _("\n\n🚰 Keep drinking water to reach your goal!")
-        msg += _("\n\nNext reminder scheduled at {next_reminder_at} local time.").format(
+        msg += _("\n\nNext reminder scheduled at {next_reminder_at}.").format(
             next_reminder_at=self.command.settings.get_next_reminder_at_display()
         )
 

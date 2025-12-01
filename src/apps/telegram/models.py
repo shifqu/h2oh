@@ -55,7 +55,7 @@ class TelegramSettings(AbstractTelegramSettings):
     )
     reminder_text = models.CharField(
         verbose_name=_("reminder text"),
-        default=_("Time to hydrate!"),
+        default="Time to hydrate!",
         help_text=_("The message you want the bot to send you for each reminder. Default is 'Time to hydrate!'."),
     )
     next_reminder_at = models.TimeField(

@@ -1,53 +1,59 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Copyright (C) 2025 shifqu
+# This file is distributed under the same license as the h2oh package.
+# Sonny Valkeneers <sonny@softllama.net>, 2025.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-01 19:05+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2025-12-01 19:10+0100\n"
+"Last-Translator: Sonny & ChatGPT <sonny@softllama.net>\n"
+"Language-Team: DUTCH <nl@li.org>\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 #: .\telegram\models.py:19
 msgid "daily goal (ml)"
-msgstr ""
+msgstr "dagelijks doel (ml)"
 
 #: .\telegram\models.py:22
 msgid ""
 "Your total water goal for the day (in milliliters). The bot will help you "
 "reach this amount before the end of your reminder window. Default is 3000 ml."
 msgstr ""
+"Je totale waterdoel voor de dag (in milliliter). De bot helpt je om deze "
+"hoeveelheid te bereiken vóór het einde van je herinneringsvenster. "
+"Standaard is 3000 ml."
 
 #: .\telegram\models.py:27
 msgid "first reminder"
-msgstr ""
+msgstr "eerste herinnering"
 
 #: .\telegram\models.py:29
 msgid "The time of day when your reminders should begin. Default is 08:00."
 msgstr ""
+"Het tijdstip waarop je herinneringen moeten beginnen. Standaard is 08:00."
 
 #: .\telegram\models.py:32
 msgid "last reminder"
-msgstr ""
+msgstr "laatste herinnering"
 
 #: .\telegram\models.py:35
 msgid ""
 "The time of day when your reminders should stop. The final reminder will "
 "never be sent after this time. Default is 22:00."
 msgstr ""
+"Het tijdstip waarop je herinneringen moeten stoppen. De laatste herinnering "
+"wordt nooit na dit tijdstip verstuurd. Standaard is 22:00."
 
 #: .\telegram\models.py:40
 msgid "consumption size (ml)"
-msgstr ""
+msgstr "consumptiegrootte (ml)"
 
 #: .\telegram\models.py:43
 msgid ""
@@ -55,10 +61,13 @@ msgid ""
 "between 100 and 500 ml. The bot uses this to plan how many reminders you "
 "need each day. Default is 250 ml."
 msgstr ""
+"Hoeveel water je normaal drinkt per herinnering (in milliliter). Dit moet "
+"tussen 100 en 500 ml zijn. De bot gebruikt dit om te bepalen hoeveel "
+"herinneringen je per dag nodig hebt. Standaard is 250 ml."
 
 #: .\telegram\models.py:49
 msgid "minimum interval (seconds)"
-msgstr ""
+msgstr "minimuminterval (seconden)"
 
 #: .\telegram\models.py:52
 msgid ""
@@ -66,87 +75,91 @@ msgid ""
 "bot from sending reminders too close together. Default is 20 minutes (1200 "
 "seconds)."
 msgstr ""
+"De kortste toegestane tijd tussen herinneringen (in seconden). Dit voorkomt "
+"dat de bot herinneringen te dicht op elkaar verstuurt. Standaard is 20 "
+"minuten (1200 seconden)."
 
 #: .\telegram\models.py:57
 msgid "reminder text"
-msgstr ""
-
-#: .\telegram\models.py:58
-msgid "Time to hydrate!"
-msgstr ""
+msgstr "herinneringstekst"
 
 #: .\telegram\models.py:59
 msgid ""
 "The message you want the bot to send you for each reminder. Default is 'Time "
 "to hydrate!'."
 msgstr ""
+"Het bericht dat je wilt dat de bot je stuurt bij elke herinnering. "
+"Standaard is 'Time to hydrate!'."
 
 #: .\telegram\models.py:62
 msgid "next reminder at"
-msgstr ""
+msgstr "volgende herinnering om"
 
 #: .\telegram\models.py:62
 msgid "when the next reminder is scheduled"
-msgstr ""
+msgstr "wanneer de volgende herinnering gepland staat"
 
 #: .\telegram\models.py:65
 msgid "consumed today (ml)"
-msgstr ""
+msgstr "vandaag geconsumeerd (ml)"
 
 #: .\telegram\models.py:67
 msgid "amount of water consumed today (ml), resets at midnight"
 msgstr ""
+"hoeveelheid water die vandaag is geconsumeerd (ml), reset om middernacht"
 
 #: .\telegram\models.py:70
 msgid "is initialized"
-msgstr ""
+msgstr "is geïnitialiseerd"
 
 #: .\telegram\models.py:72
 msgid "whether the initial setup has been completed"
-msgstr ""
+msgstr "of de initiële configuratie is voltooid"
 
 #: .\telegram\models.py:75
 msgid "last reminder sent at"
-msgstr ""
+msgstr "laatste herinnering verzonden om"
 
 #: .\telegram\models.py:78
 msgid "time of the last reminder sent"
-msgstr ""
+msgstr "tijdstip van de laatste verzonden herinnering"
 
 #: .\telegram\models.py:81
 msgid "next overview at"
-msgstr ""
+msgstr "volgend overzicht om"
 
 #: .\telegram\models.py:84
 msgid "when the next daily overview is scheduled"
-msgstr ""
+msgstr "wanneer het volgende dagelijkse overzicht gepland staat"
 
 #: .\telegram\models.py:87
 msgid "timezone"
-msgstr ""
+msgstr "tijdzone"
 
 #: .\telegram\models.py:90
 msgid "the user's timezone, e.g., 'Europe/Brussels'"
-msgstr ""
+msgstr "de tijdzone van de gebruiker, bijv. 'Europe/Brussels'"
 
 #: .\telegram\telegrambot\base.py:27
 msgid "Please complete the setup first by using the /start command."
-msgstr ""
+msgstr "Rond eerst de setup af met het /start-commando."
 
 #: .\telegram\telegrambot\commands\hydrate.py:13
 msgid "Log water consumption for the user."
-msgstr ""
+msgstr "Waterconsumptie voor de gebruiker registreren."
 
 #: .\telegram\telegrambot\commands\hydrate.py:31
 msgid ""
 "Please provide your consumption size (ml) or click the button to use the "
 "default."
 msgstr ""
+"Geef je consumptiegrootte (ml) op of klik op de knop om de standaardwaarde "
+"te gebruiken."
 
 #: .\telegram\telegrambot\commands\hydrate.py:58
 #, python-brace-format
 msgid "Invalid input for {consumption_size}: {error}."
-msgstr ""
+msgstr "Ongeldige invoer voor {consumption_size}: {error}."
 
 #: .\telegram\telegrambot\commands\hydrate.py:71
 #, python-brace-format
@@ -155,12 +168,17 @@ msgid ""
 "\n"
 "Total consumed today: {consumed_today_ml}ml/{daily_goal_ml}ml.\n"
 "\n"
-"Next reminder scheduled at {next_reminder_at} local time."
+"Next reminder scheduled at {next_reminder_at}."
 msgstr ""
+"{consumption_size_ml}ml water geregistreerd! 💧\n"
+"\n"
+"Totaal vandaag: {consumed_today_ml}ml/{daily_goal_ml}ml.\n"
+"\n"
+"Volgende herinnering gepland om {next_reminder_at}."
 
 #: .\telegram\telegrambot\commands\overview.py:13
 msgid "Show an overview of today's water consumption."
-msgstr ""
+msgstr "Toon een overzicht van de waterconsumptie van vandaag."
 
 #: .\telegram\telegrambot\commands\overview.py:33
 #, python-brace-format
@@ -169,6 +187,9 @@ msgid ""
 "\n"
 "You have consumed {consumed}ml out of your daily goal of {goal}ml."
 msgstr ""
+"💧 Overzicht van de waterconsumptie van vandaag:\n"
+"\n"
+"Je hebt {consumed}ml gedronken van je dagelijkse doel van {goal}ml."
 
 #: .\telegram\telegrambot\commands\overview.py:37
 msgid ""
@@ -176,6 +197,9 @@ msgid ""
 "\n"
 "🎉 Congratulations! You've met your daily hydration goal!"
 msgstr ""
+"\n"
+"\n"
+"🎉 Gefeliciteerd! Je hebt je dagelijkse hydratatiedoel bereikt!"
 
 #: .\telegram\telegrambot\commands\overview.py:39
 msgid ""
@@ -183,6 +207,9 @@ msgid ""
 "\n"
 "👍 You've **almost** met your daily hydration goal!"
 msgstr ""
+"\n"
+"\n"
+"👍 Je hebt je dagelijkse hydratatiedoel **bijna** bereikt!"
 
 #: .\telegram\telegrambot\commands\overview.py:41
 msgid ""
@@ -190,37 +217,45 @@ msgid ""
 "\n"
 "🚰 Keep drinking water to reach your goal!"
 msgstr ""
+"\n"
+"\n"
+"🚰 Blijf water drinken om je doel te bereiken!"
 
 #: .\telegram\telegrambot\commands\overview.py:42
 #, python-brace-format
 msgid ""
 "\n"
 "\n"
-"Next reminder scheduled at {next_reminder_at} local time."
+"Next reminder scheduled at {next_reminder_at}."
 msgstr ""
+"\n"
+"\n"
+"Volgende herinnering gepland om {next_reminder_at}."
 
 #: .\telegram\telegrambot\commands\reminder.py:14
 msgid "Send hydration reminders to the user."
-msgstr ""
+msgstr "Hydratieherinneringen naar de gebruiker sturen."
 
 #: .\telegram\telegrambot\commands\reminder.py:55
 msgid "💧 Done"
-msgstr ""
+msgstr "💧 Klaar"
 
 #: .\telegram\telegrambot\commands\reminder.py:76
 #, python-brace-format
 msgid "Next reminder scheduled at {next_reminder_at}."
-msgstr ""
+msgstr "Volgende herinnering gepland om {next_reminder_at}."
 
 #: .\telegram\telegrambot\commands\start.py:18
 msgid "Start command to welcome the user and initialize settings."
-msgstr ""
+msgstr "Startcommando om de gebruiker te verwelkomen en instellingen te configureren."
 
 #: .\telegram\telegrambot\commands\start.py:52
 msgid ""
 "Welcome to H2Oh! I am here to help you track and maintain your daily water "
 "intake. Let's get started with setting up your preferences."
 msgstr ""
+"Welkom bij H2Oh! Ik help je bij het bijhouden en onderhouden van je dagelijkse "
+"waterinname. Laten we beginnen met het instellen van je voorkeuren."
 
 #: .\telegram\telegrambot\commands\start.py:66
 msgid ""
@@ -229,6 +264,10 @@ msgid ""
 "\n"
 "If you're not sure, just pick the region where you live."
 msgstr ""
+"Kies je tijdzoneregio of stuur direct je tijdzonenaam.\n"
+"Bijvoorbeeld: Europe/Brussels, America/New_York, Asia/Tokyo.\n"
+"\n"
+"Als je het niet zeker weet, kies dan de regio waarin je woont."
 
 #: .\telegram\telegrambot\commands\start.py:96
 #, python-brace-format
@@ -236,16 +275,20 @@ msgid ""
 "The timezone '{timezone_input}' (normalized as '{normalized_tz}') is not "
 "valid. Please try again."
 msgstr ""
+"De tijdzone '{timezone_input}' (genormaliseerd als '{normalized_tz}') is "
+"ongeldig. Probeer het opnieuw."
 
 #: .\telegram\telegrambot\commands\start.py:117
 msgid ""
 "Please click on your timezone. To change region or manually enter your "
 "timezone, click '⬅️ Back'."
 msgstr ""
+"Klik op je tijdzone. Om de regio te wijzigen of je tijdzone handmatig in te voeren, "
+"klik op '⬅️ Terug'."
 
 #: .\telegram\telegrambot\commands\start.py:127
 msgid "⬅️ Back"
-msgstr ""
+msgstr "⬅️ Terug"
 
 #: .\telegram\telegrambot\commands\start.py:146
 #, python-brace-format
@@ -253,6 +296,8 @@ msgid ""
 "Please provide your {field_verbose_name}.\n"
 "{field_help_text}"
 msgstr ""
+"Geef je {field_verbose_name} op.\n"
+"{field_help_text}"
 
 #: .\telegram\telegrambot\commands\start.py:162
 #, python-brace-format
@@ -261,26 +306,31 @@ msgid ""
 "Or you can skip by clicking the button below to use the current value: "
 "{skip_value}."
 msgstr ""
+"\n"
+"Of je kunt overslaan door op de onderstaande knop te klikken om de huidige "
+"waarde te gebruiken: {skip_value}."
 
 #: .\telegram\telegrambot\commands\start.py:192
 #, python-brace-format
 msgid "Invalid input for {field_verbose_name}: {error}."
-msgstr ""
+msgstr "Ongeldige invoer voor {field_verbose_name}: {error}."
 
 #: .\telegram\telegrambot\commands\start.py:211
 msgid "✅ Yes"
-msgstr ""
+msgstr "✅ Ja"
 
 #: .\telegram\telegrambot\commands\start.py:212
 msgid "⛔️ No"
-msgstr ""
+msgstr "⛔️ Nee"
 
 #: .\telegram\telegrambot\commands\start.py:217
 msgid "Are these settings correct?\n"
-msgstr ""
+msgstr "Zijn deze instellingen correct?\n"
 
 #: .\telegram\telegrambot\commands\start.py:269
 msgid ""
 "Thank you! Your setup is now complete. You will start receiving hydration "
 "reminders based on your preferences. Stay hydrated!"
 msgstr ""
+"Dank je! Je setup is nu voltooid. Je ontvangt vanaf nu hydratieherinneringen "
+"op basis van je voorkeuren. Stay hydrated!!"

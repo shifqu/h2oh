@@ -70,7 +70,7 @@ class LogConsumption(TelegramStep):
         msg = _(
             "Logged {consumption_size_ml}ml of water! 💧\n\n"
             "Total consumed today: {consumed_today_ml}ml/{daily_goal_ml}ml.\n\n"
-            "Next reminder scheduled at {next_reminder_at} local time."
+            "Next reminder scheduled at {next_reminder_at}."
         ).format(
             consumption_size_ml=consumption_size_ml,
             consumed_today_ml=self.command.settings.consumed_today_ml,
