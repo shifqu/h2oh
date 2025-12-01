@@ -2,6 +2,7 @@
 
 from abc import ABC
 
+from django.utils.translation import gettext as _
 from django_telegram_app.bot import bot
 from django_telegram_app.bot.base import BaseBotCommand, Step, TelegramUpdate
 
@@ -23,7 +24,7 @@ class TelegramStep(Step, ABC):
         """Send a message instructing the user to complete the setup if the chat is not initialized."""
         if not self.command.settings.is_initialized:
             bot.send_message(
-                "Please complete the setup first by using the /start command.",
+                _("Please complete the setup first by using the /start command."),
                 self.command.settings.chat_id,
                 message_id=telegram_update.message_id,
             )

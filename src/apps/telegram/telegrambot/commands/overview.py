@@ -1,5 +1,6 @@
 """Overview command for Telegram bot."""
 
+from django.utils.translation import gettext as _
 from django_telegram_app.bot import bot
 from django_telegram_app.bot.base import TelegramUpdate
 
@@ -9,7 +10,7 @@ from apps.telegram.telegrambot.base import TelegramCommand, TelegramStep
 class Command(TelegramCommand):
     """Overview command to display today's water consumption."""
 
-    description = "Show an overview of today's water consumption."
+    description = _("Show an overview of today's water consumption.")
 
     @property
     def steps(self):
@@ -28,18 +29,19 @@ class ShowOverview(TelegramStep):
 
         consumed = self.command.settings.consumed_today_ml
         goal = self.command.settings.daily_goal_ml
-        msg = (
-            f"💧 Today's Water Consumption Overview:\n\n"
-            f"You have consumed {consumed}ml out of your daily goal of {goal}ml."
-        )
+        msg = _(
+            "💧 Today's Water Consumption Overview:\n\n"
+            "You have consumed {consumed}ml out of your daily goal of {goal}ml."
+        ).format(consumed=consumed, goal=goal)
         if consumed >= goal:
-            msg += "\n\n🎉 Congratulations! You've met your daily hydration goal!"
+            msg += _("\n\n🎉 Congratulations! You've met your daily hydration goal!")
         elif consumed >= 0.8 * goal:
-            msg += "\n\n👍 You've **almost** met your daily hydration goal!"
+            msg += _("\n\n👍 You've **almost** met your daily hydration goal!")
         else:
-            msg += "\n\n🚰 Keep drinking water to reach your goal!"
-
-        msg += f"\n\nNext reminder scheduled at {self.command.settings.get_next_reminder_at_display()} local time."
+            msg += _("\n\n🚰 Keep drinking water to reach your goal!")
+        msg += _("\n\nNext reminder scheduled at {next_reminder_at} local time.").format(
+            next_reminder_at=self.command.settings.get_next_reminder_at_display()
+        )
 
         bot.send_message(
             msg,

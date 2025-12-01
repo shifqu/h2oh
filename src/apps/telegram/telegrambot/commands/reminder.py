@@ -1,6 +1,7 @@
 """Reminder command for the telegram bot."""
 
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from django_telegram_app.bot import bot
 from django_telegram_app.bot.base import TelegramUpdate
 
@@ -10,7 +11,7 @@ from apps.telegram.telegrambot.base import TelegramCommand, TelegramStep
 class Command(TelegramCommand):
     """Reminder command to send hydration reminders."""
 
-    description = "Send hydration reminders to the user."
+    description = _("Send hydration reminders to the user.")
 
     @property
     def steps(self):
@@ -51,7 +52,7 @@ class Remind(TelegramStep):
             return
 
         data = self.get_callback_data(telegram_update)
-        keyboard = [[{"text": "💧 Done", "callback_data": self.next_step_callback(data, done=True)}]]
+        keyboard = [[{"text": _("💧 Done"), "callback_data": self.next_step_callback(data, done=True)}]]
         bot.send_message(
             self.command.settings.reminder_text,
             self.command.settings.chat_id,
@@ -72,8 +73,11 @@ class ScheduleNext(TelegramStep):
         self.command.settings.consumed_today_ml += self.command.settings.consumption_size_ml
         self.command.settings.next_reminder_at = self.command.settings.compute_next_reminder_datetime(from_time)
         self.command.settings.save()
+        msg = _("Next reminder scheduled at {next_reminder_at}.").format(
+            next_reminder_at=self.command.settings.get_next_reminder_at_display()
+        )
         bot.send_message(
-            f"Next reminder scheduled at {self.command.settings.get_next_reminder_at_display()} local time.",
+            msg,
             self.command.settings.chat_id,
             message_id=telegram_update.message_id,
         )

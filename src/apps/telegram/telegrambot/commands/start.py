@@ -1,6 +1,7 @@
 """Start command for Telegram bot."""
 
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 from django_telegram_app.bot import bot
 from django_telegram_app.bot.base import TelegramUpdate
 
@@ -14,7 +15,7 @@ class Command(TelegramCommand):
     Greet the user and ask them a series of questions to set up their TelegramSettings.
     """
 
-    description = "Start command to welcome the user and initialize settings."
+    description = _("Start command to welcome the user and initialize settings.")
 
     @property
     def steps(self):
@@ -47,7 +48,7 @@ class WelcomeStep(TelegramStep):
 
     def handle(self, telegram_update: TelegramUpdate):
         """Greet the user and advance to the next step."""
-        greeting = (
+        greeting = _(
             "Welcome to H2Oh! I am here to help you track and maintain your daily water intake. "
             "Let's get started with setting up your preferences."
         )
@@ -61,7 +62,7 @@ class AskTimezoneRegion(TelegramStep):
     def handle(self, telegram_update: TelegramUpdate):
         """Ask the user for their timezone region."""
         data = self.get_callback_data(telegram_update)
-        prompt = (
+        prompt = _(
             "Please choose your timezone region, or send your timezone name directly.\n"
             "For example: Europe/Brussels, America/New_York, Asia/Tokyo.\n\n"
             "If you're not sure, just pick the region where you live."
@@ -91,9 +92,9 @@ class ValidateTimezone(TelegramStep):
         timezone_input = data.get("timezone", "")
         normalized_tz = timezoneinfo.normalize_timezone(timezone_input)
         if "timezone" in data and normalized_tz not in timezoneinfo.ALL_TIMEZONES:
-            error_message = (
-                f"The timezone '{timezone_input}' (normalized as '{normalized_tz}') is not valid. Please try again."
-            )
+            error_message = _(
+                "The timezone '{timezone_input}' (normalized as '{normalized_tz}') is not valid. Please try again."
+            ).format(timezone_input=timezone_input, normalized_tz=normalized_tz)
             data.pop("timezone")
             telegram_update.callback_data = self.previous_step_callback(1, data, _error=error_message)
             self.command.previous_step(self.name, telegram_update)
@@ -113,7 +114,7 @@ class AskTimezone(TelegramStep):
             self.command.next_step(self.name, telegram_update)
             return
 
-        prompt = "Please click on your timezone. To change region or manually enter your timezone, click '⬅️ Back'."
+        prompt = _("Please click on your timezone. To change region or manually enter your timezone, click '⬅️ Back'.")
         region = data["timezone_region"]
         keyboard = []
         for tz in timezoneinfo.COMMON_TIMEZONES[region]:
@@ -123,7 +124,7 @@ class AskTimezone(TelegramStep):
         data.pop("timezone_region", None)
         data.pop("timezone", None)
         step_back_data = self.previous_step_callback(2, data)
-        keyboard.append([{"text": "⬅️ Back", "callback_data": step_back_data}])
+        keyboard.append([{"text": _("⬅️ Back"), "callback_data": step_back_data}])
 
         reply_markup = {"inline_keyboard": keyboard}
         bot.send_message(
@@ -142,7 +143,10 @@ class AskTelegramSettingsField(TelegramStep):
         super().__init__(command, unique_id=unique_id)
         self.field_name = field_name
         self.field = self.command.settings._meta.get_field(self.field_name)
-        self.prompt = f"Please provide your {self.field.verbose_name}.\n{self.field.help_text}"
+        self.prompt = _("Please provide your {field_verbose_name}.\n{field_help_text}").format(
+            field_verbose_name=self.field.verbose_name,
+            field_help_text=self.field.help_text,
+        )
 
     def handle(self, telegram_update: TelegramUpdate):
         """Prepare any data needed for the Ask step."""
@@ -154,10 +158,12 @@ class AskTelegramSettingsField(TelegramStep):
         current_value = getattr(self.command.settings, self.field_name)
         if self.field.blank or current_value:
             skip_value = current_value or self.field.get_default()
-            self.prompt += f"\nOr you can skip by clicking the button below to use the current value: {skip_value}."
+            self.prompt += _(
+                "\nOr you can skip by clicking the button below to use the current value: {skip_value}."
+            ).format(skip_value=skip_value)
             skip_options = {self.field_name: skip_value}
             next_callback = self.next_step_callback(data, **skip_options)
-            keyboard = [[{"text": f"Use default ({skip_value})", "callback_data": next_callback}]]
+            keyboard = [[{"text": str(skip_value), "callback_data": next_callback}]]
             reply_markup = {"inline_keyboard": keyboard}
         bot.send_message(
             self.prompt,
@@ -182,8 +188,11 @@ class ValidateFieldInput(TelegramStep):
         user_input = data.get(self.field_name)
         try:
             self.field.clean(user_input, model_instance=self.command.settings)
-        except ValidationError as e:
-            error_message = f"Invalid input for {self.field.verbose_name}: {e}."
+        except ValidationError as exc:
+            error_message = _("Invalid input for {field_verbose_name}: {error}.").format(
+                field_verbose_name=self.field.verbose_name,
+                error=exc,
+            )
             telegram_update.callback_data = self.previous_step_callback(1, data, _error=error_message)
             self.command.previous_step(self.name, telegram_update)
             return
@@ -199,29 +208,27 @@ class AskConfirmation(TelegramStep):
         data = self.get_callback_data(telegram_update)
         keyboard = [
             [
-                {"text": "✅ Yes", "callback_data": self.next_step_callback(data, confirmation="yes")},
-                {"text": "⛔️ No", "callback_data": self.cancel_callback(data, confirmation="no")},
+                {"text": _("✅ Yes"), "callback_data": self.next_step_callback(data, confirmation="yes")},
+                {"text": _("⛔️ No"), "callback_data": self.cancel_callback(data, confirmation="no")},
             ]
         ]
         reply_markup = {"inline_keyboard": keyboard}
 
+        prompt = _("Are these settings correct?\n")
         timezone = timezoneinfo.normalize_timezone(data.get("timezone", ""))
-        daily_goal_ml = data.get("daily_goal_ml")
-        reminder_window_start = data.get("reminder_window_start")
-        reminder_window_end = data.get("reminder_window_end")
-        consumption_size_ml = data.get("consumption_size_ml")
-        minimum_interval_seconds = data.get("minimum_interval_seconds")
-        reminder_text = data.get("reminder_text")
-        prompt = (
-            "Are these settings correct?\n"
-            f" - Timezone: {timezone}\n"
-            f" - Daily goal (ml): {daily_goal_ml}\n"
-            f" - Reminder window start: {reminder_window_start}\n"
-            f" - Reminder window end: {reminder_window_end}\n"
-            f" - Consumption size (ml): {consumption_size_ml}\n"
-            f" - Minimum interval (seconds): {minimum_interval_seconds}\n"
-            f" - Reminder text: {reminder_text}"
-        )
+        prompt += f" - {self.command.settings._meta.get_field('timezone').verbose_name}: {timezone}\n"
+        values = [
+            "daily_goal_ml",
+            "reminder_window_start",
+            "reminder_window_end",
+            "consumption_size_ml",
+            "minimum_interval_seconds",
+            "reminder_text",
+        ]
+        for field in values:
+            field_value = data.get(field)
+            prompt += f" - {self.command.settings._meta.get_field(field).verbose_name}: {field_value}\n"
+        prompt = prompt.rstrip("\n")
         bot.send_message(
             prompt,
             self.command.settings.chat_id,
@@ -258,7 +265,7 @@ class ConfirmStart(TelegramStep):
         cmd_settings.reminder_window_end = cmd_settings.convert_time_to_utc(cmd_settings.reminder_window_end)
         cmd_settings.next_reminder_at = cmd_settings.compute_next_reminder_datetime()
         cmd_settings.save()
-        confirmation_message = (
+        confirmation_message = _(
             "Thank you! Your setup is now complete. You will start receiving hydration reminders based on your preferences. "
             "Stay hydrated!"
         )
