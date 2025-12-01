@@ -28,7 +28,7 @@ class StartCommandTests(TelegramBotTestCase):
         self.assertTrue(self.last_bot_message.startswith("Please provide your consumption size (ml)."))
         self.send_text("300")  # consumption_size
         self.send_text("60")  # minimum_interval
-        self.click_on_button("Use default (Time to hydrate!)")  # reminder_text
+        self.click_on_button(0)  # reminder_text
         self.click_on_button("✅ Yes")  # confirmation
 
         # Verify that the settings were created/updated correctly
