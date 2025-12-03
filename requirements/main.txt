@@ -10,11 +10,11 @@ certifi==2025.11.12
     # via requests
 charset-normalizer==3.4.4
     # via requests
-django==5.2.8
+django==5.2.9
     # via
     #   django-telegram-app
     #   h2oh (pyproject.toml)
-django-telegram-app==1.2.1
+django-telegram-app==1.3.0
     # via h2oh (pyproject.toml)
 envyronment==0.4.0
     # via h2oh (pyproject.toml)

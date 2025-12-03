@@ -16,11 +16,11 @@ coverage==7.12.0
     # via h2oh (pyproject.toml)
 dill==0.4.0
     # via pylint
-django==5.2.8
+django==5.2.9
     # via
     #   django-telegram-app
     #   h2oh (pyproject.toml)
-django-telegram-app==1.2.1
+django-telegram-app==1.3.0
     # via h2oh (pyproject.toml)
 django-types==0.22.0
     # via h2oh (pyproject.toml)
@@ -40,7 +40,7 @@ packaging==25.0
     # via gunicorn
 platformdirs==4.5.0
     # via pylint
-pylint==4.0.3
+pylint==4.0.4
     # via h2oh (pyproject.toml)
 pyright==1.1.407
     # via h2oh (pyproject.toml)
