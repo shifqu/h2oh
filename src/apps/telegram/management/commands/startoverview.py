@@ -23,6 +23,8 @@ class Command(BaseManagementCommand):
     def handle_command(self, telegram_settings: AbstractTelegramSettings, command_text: str):
         """Handle the command and clear next_overview_at."""
         assert isinstance(telegram_settings, TelegramSettings)
+        telegram_settings.next_reminder_at = telegram_settings.reminder_window_start
+        telegram_settings.save()
         update = self._create_update(telegram_settings, command_text)
         handle_update(update=update, telegram_settings=telegram_settings)
         telegram_settings.next_overview_at = None
