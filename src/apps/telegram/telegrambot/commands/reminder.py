@@ -12,6 +12,7 @@ class Command(TelegramCommand):
     """Reminder command to send hydration reminders."""
 
     description = _("Send hydration reminders to the user.")
+    exclude_from_help = True
 
     @property
     def steps(self):
