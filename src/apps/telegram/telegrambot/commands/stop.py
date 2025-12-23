@@ -54,4 +54,4 @@ class ConfirmStop(TelegramStep):
             "If you want to start again, just send the /start command."
         )
         bot.send_message(confirmation_message, self.command.settings.chat_id, message_id=telegram_update.message_id)
-        self.command.finish(self.name, telegram_update)
+        self.command._clear_callback_data(telegram_update)
